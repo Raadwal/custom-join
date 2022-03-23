@@ -1,7 +1,7 @@
 # TO-DO
 
 ## Validator
-- Check if input files conform to the rfc4180 (mirror)
+- Check if input files conform to the rfc4180
 
 ## Joining csv file
 ### Idea:

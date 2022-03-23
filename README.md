@@ -10,7 +10,7 @@ Python 3.9.7
 ```
 ## Additional packages
 ```Bash
-  absl-py
+  None
 ```
 
 ## Brief Description
