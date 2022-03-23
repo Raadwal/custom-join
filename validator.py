@@ -1,5 +1,6 @@
 import sys
 import csv
+
 from enum import Enum
 
 """

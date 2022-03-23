@@ -1,11 +1,7 @@
 import argparse
-from random import Random
-from turtle import st
-from typing import Optional
-from typing import Sequence
 
-from validator import *
-from operations import Join
+from validator import Validator, JoinType
+from join import Join
 
 def main():
     parser = argparse.ArgumentParser(description="""
@@ -24,41 +20,12 @@ def main():
     
     if validator.join_type is JoinType.INNER:
         Join.inner(validator.first_file_path, validator.second_file_path, validator.colun_name)
-        #Join.inner("first_test.csv", "second_test.csv", "CustomerID")
-
     
     if validator.join_type is JoinType.LEFT:
         Join.left(validator.first_file_path, validator.second_file_path, validator.colun_name)
-        #Join.left("first_test.csv", "second_test.csv", "CustomerID")
     
     if validator.join_type is JoinType.RIGHT:
         Join.right(validator.first_file_path, validator.second_file_path, validator.colun_name)
-        #Join.right("first_test.csv", "second_test.csv", "CustomerID")
 
-"""
-def generate_file():
-    with open("first_test.csv", "w", newline="") as csv_test:
-        writer = csv.writer(csv_test, delimiter=',',quotechar='|', quoting=csv.QUOTE_MINIMAL)
-
-        writer.writerow(['EmployeeID', 'CustomerID', 'Sequence'])
-
-        for i in range(10000000):
-            if i % 100000 == 0:
-                print(i)
-
-            writer.writerow([str((i * i) % 10), str(i), "abcdekkfdafkldalkfjdklajkfladjklfklerwjjklewrfghijklmnoprstuwyz"])
-
-    with open("second_test.csv", "w", newline="") as csv_test:
-        writer = csv.writer(csv_test, delimiter=',',quotechar='|', quoting=csv.QUOTE_MINIMAL)
-
-        writer.writerow(['ManagerID', 'CustomerID', 'Series'])
-
-        for i in range(20000000):
-            if i % 100000 == 0:
-                print(i)
-
-            writer.writerow([str((i * i) % 10), str(i), "12343219483189504314312875612390401554567890"])
-"""
 if(__name__ == "__main__"):
-    #generate_file()
     main()

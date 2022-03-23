@@ -37,7 +37,7 @@ class Join:
                 if first_row:
                     first_headers = list(row.keys())
                     first_row = False
-                    # Printing headers
+                    # Printing headers - removing duplicated column
                     print(*(first_headers+[i for i in join.second_headers if i not in first_headers]), sep=',')
 
                 # Checking hash_table for files with given key
@@ -50,7 +50,7 @@ class Join:
                     threads = [None] * len(files_list)
                     results = [None] * len(files_list)
                     for index in range(len(files_list)):
-                        threads[index] = Thread(target=join.find_rows, args=[files_list[index], row, column, results, index])
+                        threads[index] = Thread(target=join.find_rows_inner_left, args=[files_list[index], row, column, results, index])
                         threads[index].start()
 
                     for index in range(len(files_list)):
@@ -95,7 +95,7 @@ class Join:
                 if first_row:
                     first_headers = list(row.keys())
                     first_row = False
-                    # Printing headers
+                    # Printing headers - removing duplicated column
                     print(*(first_headers+[i for i in join.second_headers if i not in first_headers]), sep=',')
 
                 # Checking hash_table for files with given key
@@ -108,7 +108,7 @@ class Join:
                     threads = [None] * len(files_list)
                     results = [None] * len(files_list)
                     for index in range(len(files_list)):
-                        threads[index] = Thread(target=join.find_rows, args=[files_list[index], row, column, results, index])
+                        threads[index] = Thread(target=join.find_rows_inner_left, args=[files_list[index], row, column, results, index])
                         threads[index].start()
 
                     for index in range(len(files_list)):
@@ -140,7 +140,7 @@ class Join:
         for header in join.second_headers:
             null_dict[header] = 'NULL'
         
-        null_dict.pop(header)
+        null_dict.pop(column)
 
         # Hashing
         # Key: column ID, value files in which given key exists
@@ -163,7 +163,6 @@ class Join:
                     first_headers = list(row.keys())
                     first_row = False
                     # Printing headers
-                    #print(*(first_headers+[i for i in join.second_headers if i not in first_headers]), sep=',')
                     tmp_list = (join.second_headers + first_headers)
                     tmp_list.reverse()
                     tmp_list = list(dict.fromkeys(tmp_list))
@@ -180,7 +179,7 @@ class Join:
                     threads = [None] * len(files_list)
                     results = [None] * len(files_list)
                     for index in range(len(files_list)):
-                        threads[index] = Thread(target=join.find_rows_right_join, args=[files_list[index], row, column, results, index])
+                        threads[index] = Thread(target=join.find_rows_right, args=[files_list[index], row, column, results, index])
                         threads[index].start()
 
                     for index in range(len(files_list)):
@@ -213,32 +212,32 @@ class Join:
 
     def divide_csv_file(self, path):
         self.chunk_paths = []
-        lines_counter = 0
+        rows_counter = 0
         chunk_number = 0
 
         first_row = True
 
         with open(path) as csv_file:
             csv_reader = csv.DictReader(csv_file)
-            lines = []
+            rows = []
 
             for row in csv_reader:      
                 if first_row:
                     self.second_headers = list(row.keys())
                     first_row = False
 
-                if lines_counter >= self.CHUNK_SIZE:
-                    self.write_chunk_file(lines, chunk_number)
+                if rows_counter >= self.CHUNK_SIZE:
+                    self.write_chunk_file(rows, chunk_number)
 
-                    lines_counter = 0
+                    rows_counter = 0
                     chunk_number += 1
-                    lines = []
+                    rows = []
 
-                lines.append(row)
-                lines_counter += 1
+                rows.append(row)
+                rows_counter += 1
 
-            if not lines == []:
-                self.write_chunk_file(lines, chunk_number)
+            if not rows == []:
+                self.write_chunk_file(rows, chunk_number)
 
                 
     def write_chunk_file(self, lines:list, chunk_number:int):
@@ -251,7 +250,7 @@ class Join:
             for line in lines:
                 csv_writer.writerow(line)
 
-    def find_rows(self, chunk, row, column, result, index):
+    def find_rows_inner_left(self, chunk, row, column, result, index):
         tmp_result = []
         with open(chunk, "r") as csv_chunk:
             chunk_reader = csv.DictReader(csv_chunk)
@@ -262,7 +261,7 @@ class Join:
 
         result[index] = tmp_result
 
-    def find_rows_right_join(self, chunk, row, column, result, index):
+    def find_rows_right(self, chunk, row, column, result, index):
         tmp_result = []
         with open(chunk, "r") as csv_chunk:
             chunk_reader = csv.DictReader(csv_chunk)
