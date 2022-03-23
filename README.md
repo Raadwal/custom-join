@@ -25,14 +25,14 @@ python main.py file_path file_path column_name join_type
 - ```Bash
   column_name
   ```
-    This argument specified which column will be used for joining two files together
+    This argument specifies which column will be used for joining two files together
 
 
 ### Nonmandatory argumet:
  ```Bash
 join_type
 ```
-Which type of join will be used. If none is specified the inner join will be used. It's the simples and most common form of join is inner join, also SQL uses inner join as default join type. 
+If none is specified, the inner join will be used. It's the simplest and most common form of join, also SQL uses inner join as the default join type.
 
 How to specified join type?
 ```Bash
@@ -46,10 +46,12 @@ python main.py important_data.csv other_data.csv ID left
 
 ### How the program works on inner join example:
 We have two files: first_data.csv second_data.csv
-- Firstly we are dividing second file into many small ones, each one has certain numbers of lines (CHUNK SIZE variable).
-- Secondly we are creating dictionary where keys are indexes of column given by user and values are lists of files which contains given indexes.
-- Thirdly we are reading first file one row at the time, we are checking value of key column and checking in dictionary in which files we can find matching rows.
-- At the end we are using multithreading for searching rows in each files and we are printing it
+- Firstly, we are dividing the second file into many small ones, each one has limited by CHUNK_SIZE number of lines.
+- Secondly, we are creating a dictionary where keys are indexes of column given by the user and values are lists of files that contains given indexes.
+- Thirdly, we are reading first file one row at a time, we are checking the value of a key column and checking in the dictionary in which files we can find matching rows.
+- In the end, we are using multithreading for searching rows, combining them, and printing to standard output.
+
+### What was tested and what wasn't?
 
 ### Python libraries that are perfect for joining two large CSV files:
 ```Bash
