@@ -20,31 +20,45 @@ def main():
     args = parser.parse_args()
 
     validator = Validator(args.first_file_path, args.second_file_path, args.column_name, args.join_type)
+
     
     if validator.join_type is JoinType.INNER:
         Join.inner(validator.first_file_path, validator.second_file_path, validator.colun_name)
+        #Join.inner("first_test.csv", "second_test.csv", "CustomerID")
 
+    
     if validator.join_type is JoinType.LEFT:
         Join.left(validator.first_file_path, validator.second_file_path, validator.colun_name)
-
+        #Join.left("first_test.csv", "second_test.csv", "CustomerID")
+    
     if validator.join_type is JoinType.RIGHT:
         Join.right(validator.first_file_path, validator.second_file_path, validator.colun_name)
+        #Join.right("first_test.csv", "second_test.csv", "CustomerID")
 
-    return 0
-
-
+"""
 def generate_file():
-    with open("test.csv", "w", newline="") as csv_test:
+    with open("first_test.csv", "w", newline="") as csv_test:
         writer = csv.writer(csv_test, delimiter=',',quotechar='|', quoting=csv.QUOTE_MINIMAL)
 
-        writer.writerow(['OrderID', 'CustomerID', 'Sequence'])
+        writer.writerow(['EmployeeID', 'CustomerID', 'Sequence'])
 
-        for i in range(1000000):
+        for i in range(10000000):
             if i % 100000 == 0:
                 print(i)
 
-            writer.writerow([str((i * i) % 10), str(i), "abcdefghijklmnoprstuwyz1234567890abcdefghijklmnoprstuwyz1234567890"])
+            writer.writerow([str((i * i) % 10), str(i), "abcdekkfdafkldalkfjdklajkfladjklfklerwjjklewrfghijklmnoprstuwyz"])
 
+    with open("second_test.csv", "w", newline="") as csv_test:
+        writer = csv.writer(csv_test, delimiter=',',quotechar='|', quoting=csv.QUOTE_MINIMAL)
+
+        writer.writerow(['ManagerID', 'CustomerID', 'Series'])
+
+        for i in range(20000000):
+            if i % 100000 == 0:
+                print(i)
+
+            writer.writerow([str((i * i) % 10), str(i), "12343219483189504314312875612390401554567890"])
+"""
 if(__name__ == "__main__"):
     #generate_file()
     main()
