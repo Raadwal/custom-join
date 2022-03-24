@@ -12,7 +12,7 @@ Python 3.10.0
 ### 1. What the program does?
 The program is designed to read two csv files and join them using a specified column. Files can be bigger than memory available on the machine. The result is written to the standard output.
 ### 2. How to run the program?
-#### a) You can simply download source files and run command:
+#### You can simply download source files and run command:
 ```Bash
 python main.py file_path file_path column_name join_type
 ```

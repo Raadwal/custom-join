@@ -4,6 +4,7 @@ from validator import Validator, JoinType
 from join import Join
 
 def main():
+    # Command line help
     parser = argparse.ArgumentParser(description="""
         The program is designed to read two csv files and join them using a specified column.
         Files can be bigger than memory available on the machine. The result is written to the standard output.

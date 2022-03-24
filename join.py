@@ -4,7 +4,7 @@ from threading import Thread
 from collections import defaultdict
 
 class Join:
-    # Path to tmp folder where divided file will be stored
+    # Path to temporary folder where partitioned files will be stored
     PATH_TO_TMP = "tmp"
     # Number of lines in each temporary file
     CHUNK_SIZE = 5000
@@ -13,6 +13,7 @@ class Join:
     def inner(first_file_path:str, second_file_path:str, column:str):
         join = Join()
 
+        # Creating folder to store files
         join.create_tmp_folder()
         # Dividing second file into smaller ones
         join.divide_csv_file(second_file_path)
@@ -26,7 +27,7 @@ class Join:
                 for row in csv_reader:
                     hash_table[row[column]].append(chunk_path)
 
-        
+        # Reading first_file
         with open(first_file_path, "r") as csv_first:
             csv_first_reader = csv.DictReader(csv_first)
             first_row = True
@@ -61,12 +62,14 @@ class Join:
                             for r in result:
                                 print(*r, sep=',')
 
+        # Deleting tmp folder with all files
         join.delete_tmp_folder()
 
     @staticmethod
     def left(first_file_path:str, second_file_path:str, column:str):
         join = Join()
 
+        # Creating folder to store files
         join.create_tmp_folder()
         # Dividing second file into smaller ones
         join.divide_csv_file(second_file_path)
@@ -84,7 +87,7 @@ class Join:
                 for row in csv_reader:
                     hash_table[row[column]].append(chunk_path)
 
-        
+        # Reading first file
         with open(first_file_path, "r") as csv_first:
             csv_first_reader = csv.DictReader(csv_first)
             first_row = True
@@ -125,13 +128,14 @@ class Join:
                     tmp_dict[column] = key_copy
                     print(*(tmp_dict.values()), sep=',')
 
-
+        # Deleting tmp folder with all files
         join.delete_tmp_folder()
 
     @staticmethod
     def right(second_file_path:str, first_file_path:str, column:str):
         join = Join()
 
+        # Creating folder to store files
         join.create_tmp_folder()
         # Dividing second file into smaller ones
         join.divide_csv_file(second_file_path)
@@ -151,7 +155,7 @@ class Join:
                 for row in csv_reader:
                     hash_table[row[column]].append(chunk_path)
 
-        
+        # Reading second file
         with open(first_file_path, "r") as csv_first:
             csv_first_reader = csv.DictReader(csv_first)
             first_row = True
@@ -193,14 +197,19 @@ class Join:
                     # Headers from second file without key column
                     print(*(list(null_dict.values()) + list(row.values())), sep=',')
 
-
+        # Deleting tmp folder with all files
         join.delete_tmp_folder()
-
+        
+    """
+    Creates temporary folder - global variable PATH_TO_TMP
+    """
     def create_tmp_folder(self):
         if not os.path.exists(self.PATH_TO_TMP):
             os.mkdir(self.PATH_TO_TMP)
 
-
+    """
+    Deletes temporary folder with all files - global variable PATH_TO_TMP
+    """
     def delete_tmp_folder(self):
         for root, dirs, files in os.walk(self.PATH_TO_TMP, topdown=False):
             for name in files:
@@ -209,7 +218,10 @@ class Join:
                 os.rmdir(os.path.join(root, name))
         
         os.rmdir(self.PATH_TO_TMP)
-
+    """
+    Dividing large CSV files into bunch of smaller ones
+    Length of each one depends on CHUNK_SIZE variable
+    """
     def divide_csv_file(self, path):
         self.chunk_paths = []
         rows_counter = 0
@@ -226,6 +238,7 @@ class Join:
                     self.second_headers = list(row.keys())
                     first_row = False
 
+                # Writing data to smaller files
                 if rows_counter >= self.CHUNK_SIZE:
                     self.write_chunk_file(rows, chunk_number)
 
@@ -238,8 +251,9 @@ class Join:
 
             if not rows == []:
                 self.write_chunk_file(rows, chunk_number)
-
-                
+    """
+    Writes data to chunk file
+    """
     def write_chunk_file(self, lines:list, chunk_number:int):
         chunk_path = self.PATH_TO_TMP + f"/chunk_{chunk_number}.csv"
         self.chunk_paths.append(chunk_path)
@@ -249,7 +263,10 @@ class Join:
 
             for line in lines:
                 csv_writer.writerow(line)
-
+    """
+    Findes row with given key - return a list with all occurrences
+    Saving data to list in the way proper for inner and left join
+    """
     def find_rows_inner_left(self, chunk, row, column, result, index):
         tmp_result = []
         with open(chunk, "r") as csv_chunk:
@@ -260,7 +277,10 @@ class Join:
                     tmp_result.append(list((row | chunk_row).values()))
 
         result[index] = tmp_result
-
+    """
+    Findes row with given key - return a list with all occurrences
+    Saving data to list in the way proper for right join
+    """
     def find_rows_right(self, chunk, row, column, result, index):
         tmp_result = []
         with open(chunk, "r") as csv_chunk:
