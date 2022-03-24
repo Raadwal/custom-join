@@ -58,8 +58,7 @@ We have two files: first_data.csv second_data.csv
 - In the end, we are using multithreading for searching rows, combining them, and printing to standard output.
 
 ### What was tested and what wasn't?
-I created 2 datasets (folder example_data) and joined them using inner, left and right join. Then I compared results of my program to the results of SQL join with the same data. Everything was identical. After that i changed CHUNK_SIZE variable to 3 to test if joining with file partitining is working. Again i compared result with SQL queries in evertyhing matched.
-I also generated 2 big csv files with random data and joined them together. There was no issue with memory. I didn't check the result of this operation, because partitioning was check before.
+I created 2 datasets (folder example_data) and joined them using inner, left, and right join. Then I compared the results of my program to the results of SQL join with the same data. Everything was identical. After that, I changed the CHUNK_SIZE variable to 3 to test if joining with file partitioning is working. Again I compared the result with SQL queries in everything matched. I also generated 2 big CSV files with random data and joined them together. There was no issue with memory. I didn't check the result of this operation, because partitioning was tested before.
 
 ### Python libraries that are perfect for joining two large CSV files:
 ```Bash
