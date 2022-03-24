@@ -7,7 +7,7 @@ class Join:
     # Path to tmp folder where divided file will be stored
     PATH_TO_TMP = "tmp"
     # Number of lines in each temporary file
-    CHUNK_SIZE = 10000
+    CHUNK_SIZE = 5000
 
     @staticmethod
     def inner(first_file_path:str, second_file_path:str, column:str):

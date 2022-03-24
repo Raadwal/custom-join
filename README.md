@@ -44,6 +44,12 @@ inner|left|right
 python main.py important_data.csv other_data.csv ID left
 ```
 
+### Hel command
+```Bash
+python main.py --help
+```
+![Help Command Image](./image/help.png)
+
 ### How the program works on inner join example:
 We have two files: first_data.csv second_data.csv
 - Firstly, we are dividing the second file into many small ones, each one has limited by CHUNK_SIZE number of lines.
@@ -52,6 +58,8 @@ We have two files: first_data.csv second_data.csv
 - In the end, we are using multithreading for searching rows, combining them, and printing to standard output.
 
 ### What was tested and what wasn't?
+I created 2 datasets (folder example_data) and joined them using inner, left and right join. Then I compared results of my program to the results of SQL join with the same data. Everything was identical. After that i changed CHUNK_SIZE variable to 3 to test if joining with file partitining is working. Again i compared result with SQL queries in evertyhing matched.
+I also generated 2 big csv files with random data and joined them together. There was no issue with memory. I didn't check the result of this operation, because partitioning was check before.
 
 ### Python libraries that are perfect for joining two large CSV files:
 ```Bash
